@@ -1,0 +1,272 @@
+/* ============================================================
+   Design Tokens
+   ============================================================ */
+
+:root {
+    /* Transitions */
+    --t-fast: 0.15s ease;
+    --t-base: 0.2s ease;
+    --t-slow: 0.3s ease;
+    --t-icon: 0.4s ease;
+
+    /* Shape */
+    --radius:    3px;
+    --font-ui:   11px;
+    --font-list: 13px;
+
+    /* Toolbar widget colors */
+    --c-widget:       #424242;
+    --c-widget-hover: #515151;
+    --c-border:       #555;
+    --c-border-hover: #777;
+}
+
+
+/* ============================================================
+   Layout
+   ============================================================ */
+
+body {
+    background-color: #232323;
+    color: #e6e6e6;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+body.light-mode {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #323232;
+    padding: 0;
+    border-bottom: 1px solid #1a1a1a;
+    flex-shrink: 0;
+}
+
+body.light-mode .toolbar           { background: #e0e0e0; border-bottom-color: #ccc; }
+body.light-mode .toolbar button    { color: #333; }
+
+.toolbar-left {
+    display: flex;
+    gap: 5px;
+    margin-left: 20px;
+}
+
+/* Shy master */
+
+.shy-master {
+    background: var(--c-widget);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    padding: 2px 2px;
+    transition: all var(--t-slow);
+}
+
+.shy-master:hover {
+    background: var(--c-widget-hover);
+    border-color: var(--c-border-hover);
+    transform: scale(1.1);
+}
+
+body.light-mode .shy-master       { background: #d0d0d0; border-color: #aaa; }
+body.light-mode .shy-master:hover { background: #e0e0e0; border-color: #888; transform: scale(1.1); }
+
+/* Button icons */
+
+.btn-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    filter: invert(1);
+    transition: transform var(--t-icon);
+}
+
+body.light-mode .btn-icon { filter: invert(0); }
+
+/* Filter select */
+
+.filter-select {
+    background: var(--c-widget);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    color: #e6e6e6;
+    font-size: var(--font-ui);
+    padding: 3px 5px;
+    cursor: pointer;
+    outline: none;
+    transition: all var(--t-base);
+}
+
+.filter-select:hover {
+    background: var(--c-widget-hover);
+    border-color: var(--c-border-hover);
+}
+
+body.light-mode .filter-select        { background: #d0d0d0; border-color: #aaa; color: #333; }
+body.light-mode .filter-select:hover  { background: #e0e0e0; border-color: #888; }
+
+/* Reset button */
+
+.btn-reset {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 7px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--t-base);
+}
+
+.btn-reset:hover {
+    background: rgba(155, 35, 53, 0.6);
+}
+
+.btn-reset:hover .btn-icon {
+    transform: rotate(360deg);
+}
+
+body.light-mode .btn-reset:hover { background: rgba(155, 35, 53, 0.5); }
+
+
+/* ============================================================
+   Script list
+   ============================================================ */
+
+/* Visibility */
+
+#launcher-view.show-panels-only .script-row-nonui                    { display: none; }
+#launcher-view.show-scripts-only .script-row:not(.script-row-nonui)  { display: none; }
+.hide-shy-rows .script-row.is-shy-active                             { display: none; }
+
+/* Row */
+
+.script-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+    height: 28px;
+    min-height: 26px;
+    width: 100%;
+    box-sizing: border-box;
+    background: #373737;
+    border: 1px solid #1a1a1a;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background var(--t-base), border-color var(--t-base), box-shadow var(--t-base), transform 120ms ease;
+}
+
+.script-row:hover {
+    background: #3f3f3f;
+    border-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 255, 115, 0.1);
+}
+
+body.light-mode .script-row       { background: #fff; border-color: #ddd; }
+body.light-mode .script-row:hover { background: #f9f9f9; border-color: #0078d4; box-shadow: 0 2px 8px rgba(0, 122, 204, 0.1); }
+
+/* Drag handle */
+
+.drag-handle {
+    width: 16px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move;
+    color: #aaa;
+    font-size: 12px;
+    user-select: none;
+    padding: 0 2px;
+    transition: color var(--t-base);
+}
+
+.drag-handle:hover                  { color: #ccc; }
+body.light-mode .drag-handle        { color: #666; }
+body.light-mode .drag-handle:hover  { color: #333; }
+
+/* Individual shy toggle */
+
+.btn-shy-individual {
+    width: 18px;
+    height: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--t-base);
+}
+
+.btn-shy-individual:hover { transform: scale(1.2); }
+
+.btn-icon-shy {
+    width: 18px;
+    height: 18px;
+    filter: invert(1);
+}
+
+body.light-mode .btn-icon-shy { filter: invert(0); }
+
+/* Main label button */
+
+.btn-main {
+    flex-grow: 1;
+    display: block;
+    width: 100%;
+    min-height: 22px;
+    line-height: 18px;
+    background: none;
+    border: none;
+    border-radius: 0;
+    color: #eee;
+    padding: 2px 6px;
+    text-align: left;
+    font-size: var(--font-list);
+    outline: none;
+    box-shadow: none;
+    pointer-events: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--t-base), background var(--t-base);
+}
+
+.btn-main:focus                    { outline: none; box-shadow: none; }
+.script-row:hover .btn-main        { color: #20E0FF; }
+body.light-mode .btn-main          { color: #333; }
+body.light-mode .script-row:hover .btn-main { color: #2080FF; }
+
+
+/* ============================================================
+   Drag & drop
+   ============================================================ */
+
+.script-row.dragging { opacity: 0; }

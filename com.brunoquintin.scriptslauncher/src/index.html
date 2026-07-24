@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="../lib/CSInterface.js"></script>
+</head>
+
+<body>
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <button id="btn-shy-master" class="shy-master" title="Hide shy scripts"><img src="assets/shy.svg"
+                    alt="Show all scripts" class="btn-icon" /></button>
+        </div>
+        <select id="filter-type" class="filter-select">
+            <option value="panel" selected>ScriptUI</option>
+            <option value="script">Scripts</option>
+            <option value="all">Both</option>
+        </select>
+        <button id="btn-reset" class="btn-reset" title="Reset"><img src="assets/reset.svg" alt="Reset"
+                class="btn-icon" /></button>
+    </div>
+
+    <div id="main-container" class="scroll-area">
+        <div id="launcher-view"></div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

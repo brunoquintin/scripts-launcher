@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Shy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <rect id="BG" class="cls-1" width="600" height="600" rx="40" ry="40"/>
+  <rect id="rect1" x="101" y="369" width="398" height="30"/>
+  <path d="M420.01,334c-27.37-38.86-70.93-64-120.01-64s-92.64,25.14-120.01,64h240.01Z"/>
+</svg>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Shy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <rect id="BG" class="cls-1" width="600" height="600" rx="40" ry="40"/>
+  <rect id="rect2" x="368" y="368.06" width="130" height="30"/>
+  <rect id="rect1" x="100" y="368.06" width="130" height="30"/>
+  <path id="skull" d="M449,289.06c0-88.37-67.16-160-150-160s-150,71.63-150,160c0,3.36.3,44,.3,44h116.7v83c0,18.15,14.85,33,33,33h0c18.15,0,33-14.85,33-33v-83h116.7s.3-40.64.3-44Z"/>
+  <circle id="circle2" class="cls-1" cx="237" cy="243.06" r="44"/>
+  <circle id="circle1" class="cls-1" cx="359" cy="243.06" r="44"/>
+</svg>

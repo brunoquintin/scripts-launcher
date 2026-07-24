@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    ExtensionBundleId="com.brunoquintin.scriptslauncher"
+    ExtensionBundleName="Scripts Launcher"
+    ExtensionBundleVersion="1.0"
+    Version="12.0">
+
+    <ExtensionList>
+        <Extension Id="com.brunoquintin.scriptslauncher.panel" Version="1.0" />
+    </ExtensionList>
+    <ExecutionEnvironment>
+        <HostList>
+            <Host Name="AEFT" Version="[22.0,99.9]" />
+        </HostList>
+        <LocaleList>
+            <Locale Code="All" />
+        </LocaleList>
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="12.0" />
+        </RequiredRuntimeList>
+    </ExecutionEnvironment>
+    <DispatchInfoList>
+        <Extension Id="com.brunoquintin.scriptslauncher.panel">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./src/index.html</MainPath>
+                    <ScriptPath>./jsx/main.jsx</ScriptPath>
+                </Resources>
+                <Lifecycle>
+                    <AutoVisible>true</AutoVisible>
+                </Lifecycle>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>Scripts Launcher</Menu>
+                    <Geometry>
+                        <Size>
+                            <Width>350</Width>
+                            <Height>500</Height>
+                        </Size>
+                        <MinSize>
+                            <Width>180</Width>
+                            <Height>200</Height>
+                        </MinSize>
+                    </Geometry>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>

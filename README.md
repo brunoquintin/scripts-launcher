@@ -1,18 +1,17 @@
-# bq-ae-tools
+# scripts-launcher
 
-Downloadable builds of Bruno Quintin's After Effects tools (CEP extensions, scripts) — for testing and personal distribution.
+**Scripts Launcher** — a CEP panel for Adobe After Effects that lists, launches, reorders, and hides installed scripts/panels, by Bruno Quintin.
 
-This repo holds **built packages only** (`.zxp` / `.jsx`), attached to [Releases](../../releases). The source code lives in a separate, private repository and is not published here.
+This is a personal project, shared here for testing — no support is guaranteed.
 
-Note: GitHub automatically adds "Source code (zip)" / "Source code (tar.gz)" links to every release — these are generated automatically for any tagged release and can't be removed individually. Since this repo has no source code committed to it, they only ever contain this README, nothing else.
+## Contents
 
-## Available tools
-
-- **Scripts Launcher** — a CEP panel to list, launch, reorder, and hide installed After Effects scripts/panels. See the [Releases page](../../releases) for the latest `.zxp`.
+- `com.brunoquintin.scriptslauncher/` — the extension's source code, as it exists before signing (no `.zxp` packaging step applied).
+- [Releases](../../releases) — signed, ready-to-install `.zxp` builds.
 
 ## Installing a `.zxp`
 
-Use the free ZXP/UXP Installer (Mac/Windows) — drag the `.zxp` onto it, restart After Effects, then Window > Extensions > \<Tool Name\>.
+Use the free ZXP/UXP Installer (Mac/Windows) — drag the `.zxp` onto it, restart After Effects, then Window > Extensions > Scripts Launcher.
 
 - [aescripts.com](https://aescripts.com/learn/post/zxp-installer)
 - [zxpinstaller.com](https://zxpinstaller.com/)

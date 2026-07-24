@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionList>
+    <Extension Id="com.brunoquintin.scriptslauncher.panel">
+        <HostList>
+            <Host Name="AEFT" Port="8092"/>
+        </HostList>
+    </Extension>
+</ExtensionList>
