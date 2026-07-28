@@ -1,8 +1,7 @@
 // main.js — Scripts Launcher (CEP panel client)
 // Drives the panel UI: listing, launching, drag-and-drop reordering, shy toggles, theme.
 // Author: Bruno Quintin
-// Version: 1.0
-// Created: July 23, 2026
+// Version: 1.1
 //
 // This extension is "Vibe Coded" and provided without warranty; the user
 // therefore assumes full responsibility for its implementation.
@@ -99,7 +98,7 @@
 
         detectAndApplyTheme();
 
-        csInterface.evalScript('resetAllPreferences()', function () {
+        csInterface.evalScript('brunoScriptLauncher.resetAllPreferences()', function () {
             loadLauncher();
         });
     }
@@ -117,7 +116,7 @@
     // --- Launcher ---
 
     function loadLauncher() {
-        csInterface.evalScript('getOrderedScriptsJSON()', function (result) {
+        csInterface.evalScript('brunoScriptLauncher.getOrderedScriptsJSON()', function (result) {
             try {
                 const scripts = JSON.parse(result);
                 const container = document.getElementById('launcher-view');
@@ -153,10 +152,10 @@
                     row.onclick = function () {
                         if (s.type === 'panel') {
                             const safeName = s.file.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-                            csInterface.evalScript('runAETask("' + safeName + '")');
+                            csInterface.evalScript('brunoScriptLauncher.runAETask("' + safeName + '")');
                         } else {
                             const safePath = s.fullPath.replace(/"/g, '\\"');
-                            csInterface.evalScript('runScript("' + safePath + '")');
+                            csInterface.evalScript('brunoScriptLauncher.runScript("' + safePath + '")');
                         }
                     };
 
@@ -191,7 +190,7 @@
             svgImg.src = ICON_SHY;
         }
         const safeId = scriptId.replace(/"/g, '\\"');
-        csInterface.evalScript('setScriptHidden("' + safeId + '", ' + newState + ')');
+        csInterface.evalScript('brunoScriptLauncher.setScriptHidden("' + safeId + '", ' + newState + ')');
     }
 
     // --- Drag & drop ---
@@ -295,7 +294,7 @@
         const encoded = rows.map(function (r) {
             return r.getAttribute('data-id').replace(/"/g, '\\"').replace(/\|/g, '%7C');
         });
-        csInterface.evalScript('updateFullOrder("' + encoded.join('|') + '")');
+        csInterface.evalScript('brunoScriptLauncher.updateFullOrder("' + encoded.join('|') + '")');
     }
 
     init();

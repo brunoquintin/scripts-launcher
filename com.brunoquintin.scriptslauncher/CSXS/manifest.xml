@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     ExtensionBundleId="com.brunoquintin.scriptslauncher"
     ExtensionBundleName="Scripts Launcher"
-    ExtensionBundleVersion="1.0"
+    ExtensionBundleVersion="1.1"
     Version="12.0">
 
     <ExtensionList>
-        <Extension Id="com.brunoquintin.scriptslauncher.panel" Version="1.0" />
+        <Extension Id="com.brunoquintin.scriptslauncher.panel" Version="1.1" />
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
