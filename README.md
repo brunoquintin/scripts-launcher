@@ -4,7 +4,15 @@ A dockable CEP panel for Adobe After Effects that lists every installed script (
 
 Built with [Bolt CEP](https://github.com/hyperbrew/bolt-cep) (React + TypeScript + Vite), by Bruno Quintin.
 
-This is a personal project, released into the public domain (see [License](#license) below) — use it, modify it, redistribute it, and contributions/PRs are welcome.
+Released into the public domain (see [License](#license) below) — use it, modify it, redistribute it, no attribution needed. Contributions/PRs are welcome too.
+
+## Installing (no coding required)
+
+1. Download the latest `.zxp` from [Releases](../../releases).
+2. Install it with the free [ZXP/UXP Installer](https://aescripts.com/learn/post/zxp-installer) (Mac/Windows) — just drag the `.zxp` file onto it. ([zxpinstaller.com](https://zxpinstaller.com/) is an alternative source for the same tool.)
+3. Restart After Effects, then open it via Window > Extensions > Scripts Launcher.
+
+Requires After Effects 2022 (22.0) or later.
 
 ## Features
 
@@ -15,13 +23,6 @@ This is a personal project, released into the public domain (see [License](#lice
 - "Reset" button clears all of the above back to defaults (alphabetical order, nothing hidden).
 - Follows the host application's light/dark theme automatically (`com.adobe.csxs.events.ThemeColorChanged`).
 
-## Installing a `.zxp`
-
-Grab the latest signed build from [Releases](../../releases), then install it with the free ZXP/UXP Installer (Mac/Windows) — drag the `.zxp` onto it, restart After Effects, then Window > Extensions > Scripts Launcher.
-
-- [aescripts.com](https://aescripts.com/learn/post/zxp-installer)
-- [zxpinstaller.com](https://zxpinstaller.com/)
-
 ## Development
 
 ```
@@ -30,9 +31,9 @@ npm run build   # compiles and symlinks the extension into Adobe's CEP extension
 npm run dev      # HMR dev server -- edit src/js or src/jsx and see changes live in the panel
 ```
 
-`npm ci` (instead of `npm install`) will reproduce the exact dependency versions this project was built and released with, using the committed `package-lock.json`.
+`npm ci` (instead of `npm install`) reproduces the exact dependency versions this project was built and released with, using the committed `package-lock.json`.
 
-Requires debug mode enabled for CSXS 9+ (see Adobe's CEP documentation) — `npm run build`/`npm run dev` load an unsigned extension. Restart After Effects after the first `npm run build`, then Window > Extensions > Scripts Launcher.
+Requires debug mode enabled for CSXS 12-15 (registry key `PlayerDebugMode` under `HKCU\Software\Adobe\CSXS.<version>` on Windows) — `npm run build`/`npm run dev` load an unsigned extension. Restart After Effects after the first `npm run build`, then Window > Extensions > Scripts Launcher.
 
 ## Packaging a `.zxp`
 
@@ -63,7 +64,7 @@ This generates a self-signed certificate on first use and outputs a signed `.zxp
 
 ## License
 
-[CC0 1.0 Universal](LICENSE) — public domain. No attribution required, though it's appreciated. No warranty of any kind; use at your own risk.
+[CC0 1.0 Universal](LICENSE) — public domain. No attribution or citation required. No warranty of any kind; use at your own risk.
 
 ## Author
 
