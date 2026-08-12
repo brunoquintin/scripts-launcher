@@ -68,6 +68,6 @@ This generates a self-signed certificate on first use and outputs a signed `.zxp
 
 ## Author
 
-Bruno Quintin — version 1.1.
+Bruno Quintin — version 1.2.
 
 This extension is "Vibe Coded" and provided without warranty; use at your own risk.

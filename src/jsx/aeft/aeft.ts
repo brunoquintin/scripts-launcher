@@ -1,7 +1,7 @@
 // aeft.ts — Scripts Launcher (ExtendScript host, After Effects)
 // Lists, launches, reorders, and hides installed scripts/panels for the CEP panel.
 // Author: Bruno Quintin
-// Version: 1.1
+// Version: 1.2
 //
 // This extension is "Vibe Coded" and provided without warranty; the user
 // therefore assumes full responsibility for its implementation.

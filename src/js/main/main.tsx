@@ -1,7 +1,7 @@
 // main.tsx — Scripts Launcher (CEP panel client)
 // Drives the panel UI: listing, launching, drag-and-drop reordering, shy toggles, theme.
 // Author: Bruno Quintin
-// Version: 1.1
+// Version: 1.2
 //
 // This extension is "Vibe Coded" and provided without warranty; the user
 // therefore assumes full responsibility for its implementation.
@@ -50,6 +50,7 @@ export const App = () => {
   const [isLightMode, setLightMode] = useState(detectLightMode);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<{ [id: string]: HTMLDivElement | null }>({});
   const dragState = useRef<{
     srcId: string;
@@ -57,6 +58,8 @@ export const App = () => {
     insertIndex: number;
     offsetY: number;
     ghostEl: HTMLDivElement | null;
+    lastClientY: number;
+    autoScrollFrame: number | null;
   } | null>(null);
 
   const loadLauncher = () => {
@@ -120,6 +123,11 @@ export const App = () => {
 
   // --- Drag & drop reorder ---
 
+  // Zone near the top/bottom edge of the scroll area that triggers auto-scroll, and
+  // the fastest scroll speed (px/frame) reached right at the edge.
+  const AUTO_SCROLL_EDGE = 40;
+  const AUTO_SCROLL_MAX_SPEED = 14;
+
   const handleDragMouseDown = (
     e: React.MouseEvent<HTMLDivElement>,
     scriptId: string
@@ -157,19 +165,26 @@ export const App = () => {
       insertIndex: srcIndex,
       offsetY: e.clientY - rect.top,
       ghostEl,
+      lastClientY: e.clientY,
+      autoScrollFrame: null,
     };
 
     document.addEventListener("mousemove", handleDragMouseMove);
     document.addEventListener("mouseup", handleDragMouseUp);
+
+    dragState.current.autoScrollFrame = requestAnimationFrame(runAutoScroll);
   };
 
-  const handleDragMouseMove = (e: MouseEvent) => {
+  // Recomputes the ghost position and the insertion index/row shifts for a given
+  // cursor Y. Called both on real mousemove and after each auto-scroll tick, since
+  // scrolling moves rows under a cursor that may not have moved itself.
+  const updateDragPosition = (clientY: number) => {
     const state = dragState.current;
     const container = containerRef.current;
     const srcEl = state && rowRefs.current[state.srcId];
     if (!state || !container || !srcEl || !state.ghostEl) return;
 
-    state.ghostEl.style.top = e.clientY - state.offsetY + "px";
+    state.ghostEl.style.top = clientY - state.offsetY + "px";
 
     const rows = Array.from(
       container.querySelectorAll<HTMLDivElement>(".script-row")
@@ -180,7 +195,7 @@ export const App = () => {
     for (let i = 0; i < rows.length; i++) {
       if (rows[i] === srcEl) continue;
       const mid = rows[i].getBoundingClientRect();
-      if (e.clientY < mid.top + mid.height / 2) {
+      if (clientY < mid.top + mid.height / 2) {
         newInsertIndex = i;
         break;
       }
@@ -201,6 +216,41 @@ export const App = () => {
     });
   };
 
+  const handleDragMouseMove = (e: MouseEvent) => {
+    const state = dragState.current;
+    if (!state) return;
+    state.lastClientY = e.clientY;
+    updateDragPosition(e.clientY);
+  };
+
+  // Auto-scrolls the scroll area while the cursor sits in the top/bottom edge zone,
+  // so a row can be dragged past what's currently visible. Runs every frame for as
+  // long as the drag is active, independent of mousemove events.
+  const runAutoScroll = () => {
+    const state = dragState.current;
+    const scrollArea = scrollAreaRef.current;
+    if (!state || !scrollArea) return;
+
+    const rect = scrollArea.getBoundingClientRect();
+    const y = state.lastClientY;
+    let delta = 0;
+
+    if (y < rect.top + AUTO_SCROLL_EDGE) {
+      const depth = Math.min(AUTO_SCROLL_EDGE, rect.top + AUTO_SCROLL_EDGE - y);
+      delta = -Math.ceil((depth / AUTO_SCROLL_EDGE) * AUTO_SCROLL_MAX_SPEED);
+    } else if (y > rect.bottom - AUTO_SCROLL_EDGE) {
+      const depth = Math.min(AUTO_SCROLL_EDGE, y - (rect.bottom - AUTO_SCROLL_EDGE));
+      delta = Math.ceil((depth / AUTO_SCROLL_EDGE) * AUTO_SCROLL_MAX_SPEED);
+    }
+
+    if (delta !== 0) {
+      scrollArea.scrollTop += delta;
+      updateDragPosition(y);
+    }
+
+    state.autoScrollFrame = requestAnimationFrame(runAutoScroll);
+  };
+
   const handleDragMouseUp = () => {
     document.removeEventListener("mousemove", handleDragMouseMove);
     document.removeEventListener("mouseup", handleDragMouseUp);
@@ -208,6 +258,10 @@ export const App = () => {
     const state = dragState.current;
     const container = containerRef.current;
     if (!state || !container) return;
+
+    if (state.autoScrollFrame !== null) {
+      cancelAnimationFrame(state.autoScrollFrame);
+    }
 
     if (state.ghostEl && state.ghostEl.parentNode) {
       state.ghostEl.parentNode.removeChild(state.ghostEl);
@@ -261,7 +315,7 @@ export const App = () => {
             onClick={toggleShyMaster}
           >
             <img
-              className="btn-icon"
+              className="btn-icon-shy"
               src={isShyMasterActive ? hideShyIcon : shyIcon}
               alt={isShyMasterActive ? "Hide shy scripts" : "Show all scripts"}
             />
@@ -281,7 +335,7 @@ export const App = () => {
         </button>
       </div>
 
-      <div className="scroll-area">
+      <div className="scroll-area" ref={scrollAreaRef}>
         <div
           id="launcher-view"
           ref={containerRef}

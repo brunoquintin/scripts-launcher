@@ -86,28 +86,21 @@ body.light-mode .toolbar button {
 /* Shy master */
 
 .shy-master {
-  background: var(--c-widget);
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius);
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  background: none;
+  border: none;
   cursor: pointer;
-  padding: 2px 2px;
-  transition: all var(--t-slow);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--t-base);
 }
 
 .shy-master:hover {
-  background: var(--c-widget-hover);
-  border-color: var(--c-border-hover);
-  transform: scale(1.1);
-}
-
-body.light-mode .shy-master {
-  background: #d0d0d0;
-  border-color: #aaa;
-}
-body.light-mode .shy-master:hover {
-  background: #e0e0e0;
-  border-color: #888;
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 /* Button icons */
