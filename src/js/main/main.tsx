@@ -1,13 +1,14 @@
 // main.tsx — Scripts Launcher (CEP panel client)
 // Drives the panel UI: listing, launching, drag-and-drop reordering, shy toggles, theme.
 // Author: Bruno Quintin
-// Version: 1.2
+// Version: 1.3
 //
 // This extension is "Vibe Coded" and provided without warranty; the user
 // therefore assumes full responsibility for its implementation.
 
 import { useEffect, useRef, useState } from "react";
-import { csi, evalTS } from "../lib/utils/bolt";
+import { evalTS } from "../lib/utils/bolt";
+import { subscribeAeTheme, applyAeTheme } from "../lib/utils/ae-theme";
 import "./main.scss";
 
 import shyIcon from "./assets/shy.svg";
@@ -27,18 +28,6 @@ interface ScriptEntry {
 
 type FilterType = "panel" | "script" | "all";
 
-const detectLightMode = (): boolean => {
-  try {
-    const bg = csi.getHostEnvironment().appSkinInfo.panelBackgroundColor
-      .color;
-    const luminance = 0.299 * bg.red + 0.587 * bg.green + 0.114 * bg.blue;
-    return luminance >= 128;
-  } catch (e) {
-    console.error("Theme detection error:", e);
-    return false;
-  }
-};
-
 export const App = () => {
   const [scripts, setScripts] = useState<ScriptEntry[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(
@@ -47,7 +36,7 @@ export const App = () => {
   const [isShyMasterActive, setShyMasterActive] = useState(
     localStorage.getItem("shyMasterActive") === "true"
   );
-  const [isLightMode, setLightMode] = useState(detectLightMode);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -68,22 +57,8 @@ export const App = () => {
 
   useEffect(() => {
     loadLauncher();
-    const onThemeChanged = () => setLightMode(detectLightMode());
-    csi.addEventListener(
-      "com.adobe.csxs.events.ThemeColorChanged",
-      onThemeChanged
-    );
-    return () => {
-      csi.removeEventListener(
-        "com.adobe.csxs.events.ThemeColorChanged",
-        onThemeChanged
-      );
-    };
+    return subscribeAeTheme(applyAeTheme);
   }, []);
-
-  useEffect(() => {
-    document.body.classList.toggle("light-mode", isLightMode);
-  }, [isLightMode]);
 
   const toggleShyMaster = () => {
     const next = !isShyMasterActive;
@@ -117,7 +92,7 @@ export const App = () => {
     localStorage.removeItem("filterType");
     setFilterType("panel");
     setShyMasterActive(false);
-    setLightMode(detectLightMode());
+    setSearchQuery("");
     evalTS("resetAllPreferences").then(loadLauncher);
   };
 
@@ -320,16 +295,23 @@ export const App = () => {
               alt={isShyMasterActive ? "Hide shy scripts" : "Show all scripts"}
             />
           </button>
+          <select
+            className="filter-select"
+            value={filterType}
+            onChange={(e) => applyFilter(e.target.value as FilterType)}
+          >
+            <option value="panel">ScriptUI</option>
+            <option value="script">Scripts</option>
+            <option value="all">Both</option>
+          </select>
         </div>
-        <select
-          className="filter-select"
-          value={filterType}
-          onChange={(e) => applyFilter(e.target.value as FilterType)}
-        >
-          <option value="panel">ScriptUI</option>
-          <option value="script">Scripts</option>
-          <option value="all">Both</option>
-        </select>
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search scripts"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <button className="btn-reset" title="Reset" onClick={resetPreferences}>
           <img className="btn-icon" src={resetIcon} alt="Reset" />
         </button>
@@ -348,7 +330,11 @@ export const App = () => {
               : "")
           }
         >
-          {scripts.map((s) => (
+          {scripts.map((s) => {
+            const query = searchQuery.trim().toLowerCase();
+            const isSearchHidden =
+              query !== "" && !s.displayName.toLowerCase().includes(query);
+            return (
             <div
               key={s.id}
               ref={(el) => {
@@ -357,7 +343,8 @@ export const App = () => {
               className={
                 "script-row" +
                 (s.hidden ? " is-shy-active" : "") +
-                (s.type === "script" ? " script-row-nonui" : "")
+                (s.type === "script" ? " script-row-nonui" : "") +
+                (isSearchHidden ? " script-row-search-hidden" : "")
               }
               data-id={s.id}
               onClick={() => runScriptEntry(s)}
@@ -388,7 +375,8 @@ export const App = () => {
               </button>
               <button className="btn-main">{s.displayName}</button>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </>

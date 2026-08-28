@@ -1,5 +1,3 @@
-@use "../variables.scss" as *;
-
 /* ============================================================
    Design Tokens
    ============================================================ */
@@ -14,13 +12,25 @@
   /* Shape */
   --radius: 3px;
   --font-ui: 11px;
-  --font-list: 13px;
 
-  /* Toolbar widget colors */
-  --c-widget: #424242;
-  --c-widget-hover: #515151;
-  --c-border: #555;
-  --c-border-hover: #777;
+  /* AE theme tokens — populated live by ae-theme.ts (applyAeTheme), which reads
+     After Effects' current UI skin. Fallback values here only matter before the
+     first ThemeColorChanged-driven update (e.g. first paint). */
+  --ae-bg: #232323;
+  --ae-appbar-bg: #2c2c2c;
+  --ae-surface: #373737;
+  --ae-surface-hover: #454545;
+  --ae-border: #1a1a1a;
+  --ae-border-hover: #0f0f0f;
+  --ae-text: #e6e6e6;
+  --ae-text-secondary: #bbbbbb;
+  --ae-icon-invert: 1;
+
+  /* Toolbar widget colors, derived from the AE tokens above */
+  --c-widget: var(--ae-surface);
+  --c-widget-hover: var(--ae-surface-hover);
+  --c-border: var(--ae-border);
+  --c-border-hover: var(--ae-border-hover);
 }
 
 /* ============================================================
@@ -34,8 +44,8 @@ body {
 }
 
 #app {
-  background-color: #232323;
-  color: #e6e6e6;
+  background-color: var(--ae-bg);
+  color: var(--ae-text);
   font-family: "Segoe UI", sans-serif;
   user-select: none;
   display: flex;
@@ -43,11 +53,6 @@ body {
   height: 100vh;
   overflow: hidden;
   position: relative;
-}
-
-body.light-mode #app {
-  background-color: #f5f5f5;
-  color: #333;
 }
 
 .scroll-area {
@@ -63,22 +68,19 @@ body.light-mode #app {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #323232;
+  background: var(--ae-appbar-bg);
   padding: 0;
-  border-bottom: 1px solid #1a1a1a;
+  border-bottom: 1px solid var(--ae-border);
   flex-shrink: 0;
 }
 
-body.light-mode .toolbar {
-  background: #e0e0e0;
-  border-bottom-color: #ccc;
-}
-body.light-mode .toolbar button {
-  color: #333;
+.toolbar button {
+  color: var(--ae-text);
 }
 
 .toolbar-left {
   display: flex;
+  flex-shrink: 0;
   gap: 5px;
   margin-left: 20px;
 }
@@ -110,12 +112,8 @@ body.light-mode .toolbar button {
   height: 14px;
   display: inline-block;
   vertical-align: middle;
-  filter: invert(1);
+  filter: invert(var(--ae-icon-invert));
   transition: transform var(--t-icon);
-}
-
-body.light-mode .btn-icon {
-  filter: invert(0);
 }
 
 /* Filter select */
@@ -124,7 +122,7 @@ body.light-mode .btn-icon {
   background: var(--c-widget);
   border: 1px solid var(--c-border);
   border-radius: var(--radius);
-  color: #e6e6e6;
+  color: var(--ae-text);
   font-size: var(--font-ui);
   padding: 3px 5px;
   cursor: pointer;
@@ -137,19 +135,40 @@ body.light-mode .btn-icon {
   border-color: var(--c-border-hover);
 }
 
-body.light-mode .filter-select {
-  background: #d0d0d0;
-  border-color: #aaa;
-  color: #333;
+/* Search field */
+
+.search-input {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  margin: 0 8px;
+  background: var(--c-widget);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  color: var(--ae-text);
+  font-size: var(--font-ui);
+  padding: 3px 6px;
+  outline: none;
+  transition: all var(--t-base);
 }
-body.light-mode .filter-select:hover {
-  background: #e0e0e0;
-  border-color: #888;
+
+.search-input::placeholder {
+  color: var(--ae-text-secondary);
+}
+
+.search-input:hover {
+  background: var(--c-widget-hover);
+  border-color: var(--c-border-hover);
+}
+
+.search-input:focus {
+  border-color: var(--c-border-hover);
 }
 
 /* Reset button */
 
 .btn-reset {
+  flex-shrink: 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -162,15 +181,11 @@ body.light-mode .filter-select:hover {
 }
 
 .btn-reset:hover {
-  background: rgba(155, 35, 53, 0.6);
+  background: rgba(155, 35, 53, 0.55);
 }
 
 .btn-reset:hover .btn-icon {
   transform: rotate(360deg);
-}
-
-body.light-mode .btn-reset:hover {
-  background: rgba(155, 35, 53, 0.5);
 }
 
 /* ============================================================
@@ -188,6 +203,9 @@ body.light-mode .btn-reset:hover {
 .hide-shy-rows .script-row.is-shy-active {
   display: none;
 }
+.script-row.script-row-search-hidden {
+  display: none;
+}
 
 /* Row */
 
@@ -196,12 +214,12 @@ body.light-mode .btn-reset:hover {
   align-items: center;
   gap: 6px;
   margin-bottom: 2px;
-  height: 28px;
-  min-height: 26px;
+  height: 25px;
+  min-height: 23px;
   width: 100%;
   box-sizing: border-box;
-  background: #373737;
-  border: 1px solid #1a1a1a;
+  background: var(--ae-surface);
+  border: 1px solid var(--ae-border);
   border-radius: var(--radius);
   cursor: pointer;
   transition: background var(--t-base), border-color var(--t-base),
@@ -209,17 +227,14 @@ body.light-mode .btn-reset:hover {
 }
 
 .script-row:hover {
-  background: #3f3f3f;
-  border-color: #fff;
+  background: var(--ae-surface-hover);
   box-shadow: 0 2px 8px rgba(0, 255, 115, 0.1);
 }
 
-body.light-mode .script-row {
-  background: #fff;
-  border-color: #ddd;
+body.ae-theme-dark .script-row:hover {
+  border-color: #fff;
 }
-body.light-mode .script-row:hover {
-  background: #f9f9f9;
+body.ae-theme-light .script-row:hover {
   border-color: #0078d4;
   box-shadow: 0 2px 8px rgba(0, 122, 204, 0.1);
 }
@@ -233,7 +248,7 @@ body.light-mode .script-row:hover {
   align-items: center;
   justify-content: center;
   cursor: move;
-  color: #aaa;
+  color: var(--ae-text-secondary);
   font-size: 12px;
   user-select: none;
   padding: 0 2px;
@@ -241,13 +256,7 @@ body.light-mode .script-row:hover {
 }
 
 .drag-handle:hover {
-  color: #ccc;
-}
-body.light-mode .drag-handle {
-  color: #666;
-}
-body.light-mode .drag-handle:hover {
-  color: #333;
+  color: var(--ae-text);
 }
 
 /* Individual shy toggle */
@@ -272,11 +281,7 @@ body.light-mode .drag-handle:hover {
 .btn-icon-shy {
   width: 18px;
   height: 18px;
-  filter: invert(1);
-}
-
-body.light-mode .btn-icon-shy {
-  filter: invert(0);
+  filter: invert(var(--ae-icon-invert));
 }
 
 /* Main label button */
@@ -290,10 +295,10 @@ body.light-mode .btn-icon-shy {
   background: none;
   border: none;
   border-radius: 0;
-  color: #eee;
+  color: var(--ae-text);
   padding: 2px 6px;
   text-align: left;
-  font-size: var(--font-list);
+  font-size: var(--font-ui);
   outline: none;
   box-shadow: none;
   pointer-events: auto;
@@ -307,13 +312,10 @@ body.light-mode .btn-icon-shy {
   outline: none;
   box-shadow: none;
 }
-.script-row:hover .btn-main {
+body.ae-theme-dark .script-row:hover .btn-main {
   color: #20e0ff;
 }
-body.light-mode .btn-main {
-  color: #333;
-}
-body.light-mode .script-row:hover .btn-main {
+body.ae-theme-light .script-row:hover .btn-main {
   color: #2080ff;
 }
 

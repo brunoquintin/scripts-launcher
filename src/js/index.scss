@@ -1,5 +1,3 @@
-@use "./variables.scss" as *;
-
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -12,15 +10,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: $darkest;
+  background: var(--ae-bg);
   padding: 2.25em 1.6875em;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $darker;
+  background: var(--ae-surface);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: $dark;
+  background: var(--ae-surface-hover);
 }
